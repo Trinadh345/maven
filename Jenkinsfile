@@ -1,43 +1,31 @@
-pipeline
-{
+pipeline{
     agent any
-    stages
-    {
-        stage('Download')
-        {
-            steps
-            {
-                git 'https://github.com/IntelliqDevops/maven.git'
+    stages{
+        stage('Download'){
+            steps{
+                git 'https://github.com/Trinadh345/maven.git'
             }
         }
-        stage('Build')
-        {
-            steps
-            {
-                sh 'mvn package'
+         stage('Build'){
+            steps{
+               sh 'mvn package'
             }
         }
-        stage('Deployment')
-        {
-            steps
-            {
-               sh 'scp /var/lib/jenkins/workspace/DeclarativePipeline1/webapp/target/webapp.war ubuntu@172.31.22.1:/var/lib/tomcat10/webapps/testapp.war'
+         stage('Depoly'){
+            steps{
+               deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: '6a49419f-26e5-4d21-9fb2-070d350eac8b', path: '', url: 'http://172.31.64.172:8080')], contextPath: 'testapp', war: '**/*.war'
             }
         }
-        stage('Testing')
-        {
-            steps
-            {
-                git 'https://github.com/IntelliqDevops/FunctionalTesting.git'
-                sh 'java -jar /var/lib/jenkins/workspace/DeclarativePipeline1/testing.jar'
-                
+         stage('Test'){
+            steps{
+             git 'https://github.com/Trinadh345/FunctionalTesting.git'
+             sh 'java -jar /var/lib/jenkins/workspace/developement/testing.jar'
             }
-        }
-        stage('Delivery')
-        {
-            steps
-            {
-               sh 'scp /var/lib/jenkins/workspace/DeclarativePipeline1/webapp/target/webapp.war ubuntu@172.31.30.192:/var/lib/tomcat10/webapps/prodapp.war'
+        } 
+          stage('Delivery'){
+            steps{
+                 deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: '6a49419f-26e5-4d21-9fb2-070d350eac8b', path: '', url: 'http://172.31.76.18:8080')], contextPath: 'prodapp', war: '**/*.war'
+
             }
         }
     }
