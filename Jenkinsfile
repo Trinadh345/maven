@@ -18,7 +18,7 @@ pipeline{
         }
          stage('Test'){
             steps{
-             git 'https://github.com/Trinadh345/functionaltesting.git'
+             git 'https://github.com/Trinadh345/functional-testing.git'
              sh 'java -jar /var/lib/jenkins/workspace/developement/testing.jar'
             }
         } 
