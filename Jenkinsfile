@@ -13,7 +13,7 @@ pipeline{
         }
          stage('Depoly'){
             steps{
-               deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: '6a49419f-26e5-4d21-9fb2-070d350eac8b', path: '', url: 'http://172.31.64.172:8080')], contextPath: 'testapp', war: '**/*.war'
+              sh 'scp /var/lib/jenkins/workspace/developement/webapp/target/webapp.war ubuntu@172.31.64.172:/var/lib/tomcat10/webapps/testapp.war'
             }
         }
          stage('Test'){
